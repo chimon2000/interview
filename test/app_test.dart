@@ -13,6 +13,8 @@ import 'package:interview/src/books/book_list_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   group('BooksApp', () {
