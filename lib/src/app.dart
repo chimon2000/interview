@@ -18,8 +18,8 @@ final routes = RouteMap(
   routes: {
     '/': (_) => Redirect('/books'),
     '/books': (_) => MaterialPage(child: BookListView()),
-    '/books/:id': (_) => MaterialPage(child: BookDetailsView()),
-    '/books/:id/edit': (_) => MaterialPage(child: BookEditView()),
+    '/books/:id': (routeData) =>
+        MaterialPage(child: BookEditView(id: routeData.pathParameters['id'])),
     '/books/new': (_) => MaterialPage(child: BookEditView()),
   },
 );

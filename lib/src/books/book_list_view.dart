@@ -27,44 +27,49 @@ class BookListView extends ConsumerWidget {
             ),
             itemBuilder: (context, index) {
               final book = data[index];
-              return Column(
-                children: [
-                  if (book.imageUrl != null)
-                    Stack(
-                      children: [
-                        Center(
-                          child: Container(
-                            width: 268,
-                            height: 401,
-                            child: Center(
-                              child: CircularProgressIndicator(),
+              return GestureDetector(
+                onTap: () {
+                  Routemaster.of(context).push(book.id);
+                },
+                child: Column(
+                  children: [
+                    if (book.imageUrl != null)
+                      Stack(
+                        children: [
+                          Center(
+                            child: Container(
+                              width: 268,
+                              height: 401,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             ),
                           ),
+                          Center(
+                            child: FadeInImage.memoryNetwork(
+                              width: 268,
+                              height: 401,
+                              placeholder: kTransparentImage,
+                              image: book.imageUrl!,
+                            ),
+                          )
+                        ],
+                      )
+                    else
+                      Container(
+                        width: 268,
+                        height: 401,
+                        child: Placeholder(
+                          fallbackWidth: 268,
+                          fallbackHeight: 401,
                         ),
-                        Center(
-                          child: FadeInImage.memoryNetwork(
-                            width: 268,
-                            height: 401,
-                            placeholder: kTransparentImage,
-                            image: book.imageUrl!,
-                          ),
-                        )
-                      ],
-                    )
-                  else
-                    Container(
-                      width: 268,
-                      height: 401,
-                      child: Placeholder(
-                        fallbackWidth: 268,
-                        fallbackHeight: 401,
                       ),
-                    ),
-                  SizedBox(height: 16),
-                  Text(book.title, style: textTheme.headline6),
-                  SizedBox(height: 8),
-                  Text(book.author),
-                ],
+                    SizedBox(height: 16),
+                    Text(book.title, style: textTheme.headline6),
+                    SizedBox(height: 8),
+                    Text(book.author),
+                  ],
+                ),
               );
             },
             itemCount: data.length,

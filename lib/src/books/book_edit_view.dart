@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:interview/src/books/book.dart';
 import 'package:interview/src/books/controllers/book_list_view_controller.dart';
+import 'package:routemaster/routemaster.dart';
 
 import 'controllers/book_edit_view_controller.dart';
 
@@ -18,15 +19,20 @@ class BookEditView extends ConsumerStatefulWidget {
 }
 
 class _BookEditViewState extends ConsumerState<BookEditView> {
-  late final service = ref.read(bookEditViewControllerRef.notifier);
+  late final controller = ref.read(bookEditViewControllerRef.notifier);
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      service.getBook(widget.id);
+      controller.getBook(widget.id);
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -44,9 +50,7 @@ class _BookEditViewState extends ConsumerState<BookEditView> {
             required title,
             required author,
             imageUrl,
-          }) {
-            print('add book');
-
+          }) async {
             final bookEditViewController =
                 ref.read(bookEditViewControllerRef.notifier);
             final bookListViewController =
@@ -59,12 +63,14 @@ class _BookEditViewState extends ConsumerState<BookEditView> {
                 imageUrl: imageUrl,
               );
 
-              bookEditViewController.updateBook(book: updated);
+              await bookEditViewController.updateBook(book: updated);
             } else {
-              bookEditViewController.addBook(author: author, title: title);
+              await bookEditViewController.addBook(
+                  author: author, title: title);
             }
 
-            bookListViewController.getBooks();
+            await bookListViewController.getBooks();
+            Routemaster.of(context).pop();
           },
         ),
         error: (_, __) => Container(),

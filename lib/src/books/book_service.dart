@@ -4,12 +4,14 @@ import 'package:interview/src/books/book.dart';
 class BookService {
   List<Book> books = [
     Book(
+      id: 'abc-123',
       title: 'New Spring',
       author: 'Robert Jordan',
       imageUrl:
           'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328959234l/187065.jpg',
     ),
     Book(
+      id: 'def-456',
       title: 'The Eye of the World',
       author: 'Robert Jordan',
       imageUrl:
@@ -18,11 +20,24 @@ class BookService {
   ];
 
   Future<List<Book>> getBooks() async {
+    print('get books');
+
+    await Future.delayed(Duration(seconds: 1));
+
     return books;
   }
 
-  Future<Book> getBook(String id) async {
-    return books.firstWhere((e) => e.id == id);
+  Future<Book?> getBook(String id) async {
+    print('get book $id');
+
+    try {
+      final book = books.firstWhere((e) => e.id == id);
+      await Future.delayed(Duration(seconds: 1));
+
+      return book;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<Book> addBook({

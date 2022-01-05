@@ -9,12 +9,15 @@ class BookDetailViewController extends StateNotifier<BookDetailState> {
   final BookService service;
 
   Future<Book?> getBook(String? id) async {
+    state = AsyncValue.loading();
+
     if (id == null) {
       state = AsyncValue.data(null);
       return null;
     }
 
     final book = await service.getBook(id);
+
     state = AsyncValue.data(book);
 
     return book;
@@ -37,8 +40,8 @@ class BookDetailViewController extends StateNotifier<BookDetailState> {
   }
 }
 
-final bookEditViewControllerRef =
-    StateNotifierProvider<BookDetailViewController, BookDetailState>((ref) {
+final bookEditViewControllerRef = StateNotifierProvider.autoDispose<
+    BookDetailViewController, BookDetailState>((ref) {
   return BookDetailViewController(ref.read(bookServiceRef));
 });
 
